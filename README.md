@@ -19,5 +19,4 @@ TODO
 --------
 
 - Add options for delimeter
-- Hook up file loading
 - Make renderable
