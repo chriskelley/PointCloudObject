@@ -2,7 +2,6 @@ STRINGTABLE Opointcloudobject {
     Opointcloudobject "Point Cloud Object";
     POINTCLOUDOBJECT_POINTSIZE "Point Size";
 	POINTCLOUDOBJECT_DENSITY "Point Density";
-	POINTCLOUDOBJECT_FILE "Load File";
-	POINTCLOUDOBJECT_LOADBTN "Load";
+	POINTCLOUDOBJECT_LOADBTN "Load File";
 	POINTCLOUDOBJECT_INVERTY "Invert Y-axis";
 }

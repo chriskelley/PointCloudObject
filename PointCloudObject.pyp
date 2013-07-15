@@ -25,7 +25,9 @@ class PointCloudObject(plugins.ObjectData):
     def Message(self, op, type, data):
         if type == c4d.MSG_DESCRIPTION_COMMAND:
             if data['id'][0].id == c4d.POINTCLOUDOBJECT_LOADBTN:
-                self.LoadData(op)
+                fname = c4d.storage.LoadDialog()
+                if(fname):
+                    self.LoadData(op, fname)
         return True
 
     def Init(self, op):
@@ -76,9 +78,10 @@ class PointCloudObject(plugins.ObjectData):
 
         return c4d.DRAWRESULT_OK
 
-    def LoadData(self, op, fname=""):
+    def LoadData(self, op, fname):
+        #c4d.StatusSetText("Loading...")
+        c4d.StatusSetSpin()
         self.pvec, self.cvec, self.pointcount = [], [], 0
-        fname = "/Users/chriskelley/Downloads/PointCloudReduced.txt"
         with open(fname) as f:
             for i, l in enumerate(f):
                 if i % self.initialStep == 0:
@@ -100,6 +103,7 @@ class PointCloudObject(plugins.ObjectData):
             op[c4d.POINTCLOUDOBJECT_DENSITY] = self.initialPointCeiling / self.pointcount
             self.dataIsLoaded = True
 
+        c4d.StatusClear()
         return True
 
     def ParseLine(self, line, delim=" "):
