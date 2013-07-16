@@ -5,9 +5,6 @@ Written for CINEMA 4D R13.058
 """
 
 import os
-import math
-import sys
-import random
 import c4d
 
 from c4d import plugins, utils, bitmaps, gui
@@ -20,7 +17,8 @@ class PointCloudObject(plugins.ObjectData):
 
     def GetVirtualObjects(self, op, hierarchyhelp):
         dirty = op.CheckCache(hierarchyhelp) or op.IsDirty(c4d.DIRTY_DATA)
-        if dirty is False: return op.GetCache(hierarchyhelp)
+        if dirty is False:
+            return op.GetCache(hierarchyhelp)
 
     def Message(self, op, type, data):
         if type == c4d.MSG_DESCRIPTION_COMMAND:
@@ -42,12 +40,10 @@ class PointCloudObject(plugins.ObjectData):
         self.pvec = []
         self.cvec = []
         self.pointcount = 0
-        self.scale = 10
-        self.initialStep = 100
-        self.particleStep = 0
-        self.initialPointCeiling = 10000.0
+        self.scale = 10  # multiplier for scene scale - currently arbitrary
+        self.initialStep = 100  # load only every nth entry in the file.  Otherwise loading can take forever.  Temporary.
+        self.initialPointCeiling = 10000.0  # intial particle count we want to display
         self.colordepth = 255
-        self.pointsize = 1
         self.dataIsLoaded = False
 
         self.boundingBox = dict.fromkeys(['min_x', 'min_y', 'min_z', 'max_x', 'max_y', 'max_z'], 0)
@@ -55,11 +51,6 @@ class PointCloudObject(plugins.ObjectData):
         return True
 
     def GetDimension(self, op, mp, rad):
-        """
-        (i) When the method runs without a raised exception
-        mp and rad will be internally copied, otherwise they
-        are ignored.
-        """
         mp.x = self.boundingBox['max_x'] - self.boundingBox['min_x']
         mp.y = self.boundingBox['max_y'] - self.boundingBox['min_y']
         mp.z = self.boundingBox['max_z'] - self.boundingBox['min_z']
@@ -99,7 +90,6 @@ class PointCloudObject(plugins.ObjectData):
                     self.pointcount += 1
 
         if self.pointcount > 0:
-            self.particleStep = self.pointcount - (self.pointcount * (self.initialPointCeiling / self.pointcount))
             op[c4d.POINTCLOUDOBJECT_DENSITY] = self.initialPointCeiling / self.pointcount
             self.dataIsLoaded = True
 
@@ -141,7 +131,6 @@ class PointCloudObject(plugins.ObjectData):
             self.boundingBox['max_z'] = dim[2]
 
         return True
-
 
 
 if __name__ == "__main__":
